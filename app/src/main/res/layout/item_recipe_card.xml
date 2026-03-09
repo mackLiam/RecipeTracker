@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    app:cardBackgroundColor="@color/card_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Recipe image placeholder (solid color block) -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_image_height"
+            android:background="@color/watermelon_red">
+
+            <!-- Category badge -->
+            <TextView
+                android:id="@+id/tv_card_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="8dp"
+                android:background="#80000000"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="Dinner"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
+
+            <!-- Favourite star -->
+            <ImageView
+                android:id="@+id/iv_card_favourite"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="8dp"
+                android:src="@android:drawable/btn_star_big_off"
+                android:contentDescription="Favourite" />
+
+        </FrameLayout>
+
+        <!-- Text content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_card_title"
+                style="@style/TextAppearance.RecipeBook.CardTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Recipe Title" />
+
+            <TextView
+                android:id="@+id/tv_card_prep_time"
+                style="@style/TextAppearance.RecipeBook.CardSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:drawablePadding="4dp"
+                android:text="30 mins" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

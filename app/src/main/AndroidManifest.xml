@@ -10,16 +10,40 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RecipeTracker">
+        android:theme="@style/Theme.RecipeBook">
+
+        <!-- Home screen — launches first -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Recipe detail screen -->
+        <activity
+            android:name=".RecipeDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Add / Edit recipe screen -->
+        <activity
+            android:name=".AddEditRecipeActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- Favourites screen -->
+        <activity
+            android:name=".FavouritesActivity"
+            android:exported="false" />
+
+        <!-- Discover screen -->
+        <activity
+            android:name=".DiscoverActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

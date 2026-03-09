@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Standard spacing -->
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_image_height">160dp</dimen>
+
+    <!-- Screen padding (apply to root layout of every screen) -->
+    <dimen name="screen_padding">16dp</dimen>
+
+    <!-- Bottom nav height -->
+    <dimen name="bottom_nav_height">56dp</dimen>
+</resources>

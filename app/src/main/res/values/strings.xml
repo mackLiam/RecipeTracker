@@ -1,3 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RecipeTracker</string>
+    <string name="app_name">RecipeBook</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_discover">Discover</string>
+    <string name="nav_favourites">Favourites</string>
+
+    <!-- Home Screen -->
+    <string name="home_greeting">What are you cooking today?</string>
+    <string name="search_hint">Search recipes…</string>
+
+    <!-- Recipe Detail -->
+    <string name="ingredients_label">Ingredients</string>
+    <string name="steps_label">Steps</string>
+    <string name="add_to_favourites">Add to Favourites</string>
+    <string name="remove_from_favourites">Remove from Favourites</string>
+    <string name="edit_recipe">Edit Recipe</string>
+
+    <!-- Add / Edit Recipe -->
+    <string name="add_recipe_title">Add New Recipe</string>
+    <string name="edit_recipe_title">Edit Recipe</string>
+    <string name="hint_recipe_name">Recipe Name</string>
+    <string name="hint_ingredients">Ingredients (one per line)</string>
+    <string name="hint_steps">Steps (one per line)</string>
+    <string name="hint_category">Category (e.g. Breakfast, Dinner…)</string>
+    <string name="hint_prep_time">Prep time (e.g. 30 mins)</string>
+    <string name="btn_save">Save Recipe</string>
+    <string name="btn_delete">Delete Recipe</string>
+
+    <!-- Favourites -->
+    <string name="favourites_empty">No favourites yet!\nTap the ♥ on any recipe to save it.</string>
+
+    <!-- Discover -->
+    <string name="discover_title">Discover Recipes</string>
+
+    <!-- Errors / Toasts -->
+    <string name="error_empty_name">Please enter a recipe name.</string>
+    <string name="error_empty_ingredients">Please enter at least one ingredient.</string>
+    <string name="error_empty_steps">Please enter at least one step.</string>
+    <string name="saved_success">Recipe saved!</string>
+    <string name="deleted_success">Recipe deleted.</string>
 </resources>
