@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -13,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.recipetracker.database.RecipeDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Calendar;
 
 /**
  * MainActivity — Home Screen
@@ -22,13 +27,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  *  - Search bar that filters results live
  *  - FAB to go to AddEditRecipeActivity
  *  - Bottom navigation (same on every screen)
+ *  - Dynamic greeting based on time of day
+ *  - Empty state when no recipes exist
  */
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private EditText searchBar;
+    private TextInputEditText searchBar;
     private FloatingActionButton fabAdd;
     private BottomNavigationView bottomNav;
+    private LinearLayout emptyStateContainer;
+    private TextView greetingText;
 
     // TODO: create a RecipeAdapter class for the RecyclerView
     // private RecipeAdapter adapter;
@@ -40,9 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Wire up views
         recyclerView = findViewById(R.id.recycler_recipes);
-        searchBar    = findViewById(R.id.edit_search);
-        fabAdd       = findViewById(R.id.fab_add_recipe);
-        bottomNav    = findViewById(R.id.bottom_navigation);
+        searchBar = findViewById(R.id.edit_search);
+        fabAdd = findViewById(R.id.fab_add_recipe);
+        bottomNav = findViewById(R.id.bottom_navigation);
+        emptyStateContainer = findViewById(R.id.empty_state_container);
+        greetingText = findViewById(R.id.tv_greeting);
+
+        // Set dynamic greeting based on time of day
+        setDynamicGreeting();
 
         // Grid: 2 columns
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -55,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 .getAllRecipes()
                 .observe(this, recipes -> {
                     // TODO: adapter.setRecipes(recipes);
+                    updateEmptyState(recipes != null && !recipes.isEmpty());
                 });
 
         // Live search — fires every time the user types
@@ -62,12 +77,25 @@ public class MainActivity extends AppCompatActivity {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().trim();
-                RecipeDatabase.getInstance(MainActivity.this)
-                        .recipeDao()
-                        .searchRecipes(query)
-                        .observe(MainActivity.this, recipes -> {
-                            // TODO: adapter.setRecipes(recipes);
-                        });
+                if (query.isEmpty()) {
+                    // Show all recipes
+                    RecipeDatabase.getInstance(MainActivity.this)
+                            .recipeDao()
+                            .getAllRecipes()
+                            .observe(MainActivity.this, recipes -> {
+                                // TODO: adapter.setRecipes(recipes);
+                                updateEmptyState(recipes != null && !recipes.isEmpty());
+                            });
+                } else {
+                    // Search recipes
+                    RecipeDatabase.getInstance(MainActivity.this)
+                            .recipeDao()
+                            .searchRecipes(query)
+                            .observe(MainActivity.this, recipes -> {
+                                // TODO: adapter.setRecipes(recipes);
+                                updateEmptyState(recipes != null && !recipes.isEmpty());
+                            });
+                }
             }
             @Override public void afterTextChanged(Editable s) {}
         });
@@ -80,6 +108,38 @@ public class MainActivity extends AppCompatActivity {
 
         // Bottom nav
         setupBottomNav();
+    }
+
+    /**
+     * Set greeting text based on current time of day
+     */
+    private void setDynamicGreeting() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        int greetingResId;
+        if (hour >= 5 && hour < 12) {
+            greetingResId = R.string.home_greeting_morning;
+        } else if (hour >= 12 && hour < 17) {
+            greetingResId = R.string.home_greeting_afternoon;
+        } else {
+            greetingResId = R.string.home_greeting_evening;
+        }
+
+        greetingText.setText(greetingResId);
+    }
+
+    /**
+     * Show/hide empty state based on whether recipes exist
+     */
+    private void updateEmptyState(boolean hasRecipes) {
+        if (hasRecipes) {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyStateContainer.setVisibility(View.GONE);
+        } else {
+            recyclerView.setVisibility(View.GONE);
+            emptyStateContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupBottomNav() {
