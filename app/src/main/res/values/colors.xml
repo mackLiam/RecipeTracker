@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Watermelon Palette -->
+    <color name="watermelon_red">#D96868</color>
+    <color name="watermelon_light">#FBF6F6</color>
+    <color name="watermelon_green">#6A7E3F</color>
+    <color name="watermelon_dark_green">#4C5C2D</color>
+
+    <!-- Utility Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#1A1A1A</color>
+    <color name="text_primary">#1A1A1A</color>
+    <color name="text_secondary">#666666</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="star_yellow">#FFC107</color>
+</resources>
