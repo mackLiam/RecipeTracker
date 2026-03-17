@@ -8,8 +8,15 @@
     <string name="nav_favourites">Favourites</string>
 
     <!-- Home Screen -->
-    <string name="home_greeting">What are you cooking today?</string>
+    <string name="home_greeting_morning">Good morning! What are you cooking?</string>
+    <string name="home_greeting_afternoon">Good afternoon! Let\'s find a recipe</string>
+    <string name="home_greeting_evening">Good evening! Ready to cook?</string>
     <string name="search_hint">Search recipes…</string>
+    <string name="empty_state_title">No recipes yet</string>
+    <string name="empty_state_subtitle">Start by adding your first recipe</string>
+    <string name="empty_state_action">Create Recipe</string>
+    <string name="no_search_results">No recipes found</string>
+    <string name="recipes_count">%d recipes</string>
 
     <!-- Recipe Detail -->
     <string name="ingredients_label">Ingredients</string>
@@ -31,6 +38,11 @@
 
     <!-- Favourites -->
     <string name="favourites_empty">No favourites yet!\nTap the ♥ on any recipe to save it.</string>
+
+    <!-- Recipe Card -->
+    <string name="card_category_placeholder">Dinner</string>
+    <string name="card_prep_time_placeholder">30 mins</string>
+    <string name="card_title_placeholder">Recipe Title</string>
 
     <!-- Discover -->
     <string name="discover_title">Discover Recipes</string>

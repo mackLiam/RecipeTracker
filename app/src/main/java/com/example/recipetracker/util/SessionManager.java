@@ -4,41 +4,60 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * SessionManager — stores the current username in SharedPreferences.
- *
- * Use this to get the username when saving a recipe,
- * and to check if the current user can edit a recipe.
- *
- * Usage:
- *   SessionManager session = new SessionManager(this);
- *   String user = session.getUsername();   // get current user
- *   session.setUsername("Alice");          // set on login
- *   session.clear();                       // on logout
+ * SessionManager — Manages user session data using SharedPreferences
  */
 public class SessionManager {
 
-    private static final String PREF_NAME = "RecipeBookSession";
+    private static final String PREF_NAME = "recipe_tracker_session";
     private static final String KEY_USERNAME = "username";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
 
-    private final SharedPreferences prefs;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences.Editor editor;
 
     public SessionManager(Context context) {
-        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
-    public void setUsername(String username) {
-        prefs.edit().putString(KEY_USERNAME, username).apply();
+    /**
+     * Save user session
+     */
+    public void createSession(String username) {
+        editor.putString(KEY_USERNAME, username);
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.apply();
     }
 
+    /**
+     * Get current username
+     */
     public String getUsername() {
-        return prefs.getString(KEY_USERNAME, "Guest");
+        return sharedPreferences.getString(KEY_USERNAME, "User");
     }
 
+    /**
+     * Check if user is logged in
+     */
     public boolean isLoggedIn() {
-        return !getUsername().equals("Guest");
+        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
-    public void clear() {
-        prefs.edit().clear().apply();
+    /**
+     * Logout user
+     */
+    public void logout() {
+        editor.clear();
+        editor.apply();
+    }
+
+    /**
+     * Set default username if not set
+     */
+    public void ensureUsername() {
+        if (getUsername().equals("User")) {
+            createSession("User");
+        }
     }
 }
+

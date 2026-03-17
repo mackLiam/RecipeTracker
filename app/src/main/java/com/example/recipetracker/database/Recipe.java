@@ -1,62 +1,69 @@
 package com.example.recipetracker.database;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 /**
- * Recipe — the central data model for the whole app.
- *
- * Do NOT add or rename fields without telling everyone,
- * because all screens depend on this class.
- *
- * If you add a field, also add it to RecipeDao and run the app
- * once so Room rebuilds the database.
+ * Recipe entity — represents a single recipe in the database
  */
 @Entity(tableName = "recipes")
 public class Recipe {
-
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    /** Display title shown on cards and detail screen */
+    @ColumnInfo(name = "title")
     public String title;
 
-    /** Comma-separated or newline-separated list of ingredients */
+    @ColumnInfo(name = "ingredients")
     public String ingredients;
 
-    /** Newline-separated cooking steps */
+    @ColumnInfo(name = "steps")
     public String steps;
 
-    /** e.g. "Breakfast", "Dinner", "Dessert" */
+    @ColumnInfo(name = "category")
     public String category;
 
-    /** e.g. "30 mins" — free text, just display it */
+    @ColumnInfo(name = "prep_time")
     public String prepTime;
 
-    /**
-     * Username of whoever added this recipe.
-     * Used to decide if the Edit button should be visible.
-     * Set this to the logged-in username when saving.
-     */
+    @ColumnInfo(name = "created_by")
+    public String createdBy;
+
+    // Alias for compatibility
     public String addedByUser;
 
-    /** true = show in Favourites screen */
+    @ColumnInfo(name = "is_favourite")
     public boolean isFavourite;
 
-    // -------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------
+    @ColumnInfo(name = "created_at")
+    public long createdAt;
 
-    public Recipe() { }
+    /**
+     * Constructor for creating new recipes
+     */
+    public Recipe(String title, String ingredients, String steps, String category, String prepTime, String createdBy) {
+        this.title = title;
+        this.ingredients = ingredients;
+        this.steps = steps;
+        this.category = category;
+        this.prepTime = prepTime;
+        this.createdBy = createdBy;
+        this.addedByUser = createdBy; // Alias for compatibility
+        this.isFavourite = false;
+        this.createdAt = System.currentTimeMillis();
+    }
 
-    public Recipe(String title, String ingredients, String steps,
-                  String category, String prepTime, String addedByUser) {
-        this.title        = title;
-        this.ingredients  = ingredients;
-        this.steps        = steps;
-        this.category     = category;
-        this.prepTime     = prepTime;
-        this.addedByUser  = addedByUser;
-        this.isFavourite  = false;
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", prepTime='" + prepTime + '\'' +
+                '}';
     }
 }
+
+
+

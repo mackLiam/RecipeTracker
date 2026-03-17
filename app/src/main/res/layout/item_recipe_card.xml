@@ -7,71 +7,113 @@
     android:layout_margin="8dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardElevation="@dimen/card_elevation"
-    app:cardBackgroundColor="@color/card_background">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/card_background"
+    app:rippleColor="@color/primary_red_light">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Recipe image placeholder (solid color block) -->
+        <!-- Recipe image container with gradient overlay -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/card_image_height"
-            android:background="@color/watermelon_red">
+            android:layout_height="180dp"
+            android:background="@color/primary_red">
+
+            <!-- Gradient overlay for better text contrast -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="bottom"
+                android:background="@android:color/transparent" />
 
             <!-- Category badge -->
-            <TextView
-                android:id="@+id/tv_card_category"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
-                android:layout_margin="8dp"
-                android:background="#80000000"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:text="Dinner"
-                android:textColor="@color/white"
-                android:textSize="11sp" />
+                android:layout_margin="12dp"
+                android:background="#B3000000"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-            <!-- Favourite star -->
+                <TextView
+                    android:id="@+id/tv_card_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_category_placeholder"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Favourite star button -->
             <ImageView
                 android:id="@+id/iv_card_favourite"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="top|end"
-                android:layout_margin="8dp"
+                android:layout_margin="12dp"
                 android:src="@android:drawable/btn_star_big_off"
-                android:contentDescription="Favourite" />
+                android:contentDescription="@string/add_to_favourites"
+                android:scaleType="centerInside"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="4dp" />
 
         </FrameLayout>
 
-        <!-- Text content -->
+        <!-- Text content section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="16dp">
 
+            <!-- Recipe title -->
             <TextView
                 android:id="@+id/tv_card_title"
-                style="@style/TextAppearance.RecipeBook.CardTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/card_title_placeholder"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="Recipe Title" />
+                android:lineSpacingExtra="2dp" />
 
-            <TextView
-                android:id="@+id/tv_card_prep_time"
-                style="@style/TextAppearance.RecipeBook.CardSubtitle"
+            <!-- Prep time -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:drawablePadding="4dp"
-                android:text="30 mins" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@android:drawable/ic_menu_today"
+                    android:contentDescription="@string/ingredients_label"
+                    app:tint="@color/secondary_green"
+                    android:scaleType="centerInside" />
+
+                <TextView
+                    android:id="@+id/tv_card_prep_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/card_prep_time_placeholder"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
