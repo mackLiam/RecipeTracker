@@ -81,15 +81,16 @@
         android:layout_marginBottom="56dp">
 
         <!-- RecyclerView for recipes -->
+
+        <!-- Empty state -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_recipes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp"
             android:clipToPadding="false"
+            android:padding="12dp"
             android:visibility="visible" />
 
-        <!-- Empty state -->
         <LinearLayout
             android:id="@+id/empty_state_container"
             android:layout_width="match_parent"
@@ -129,21 +130,22 @@
 
         </LinearLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_recipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/empty_state_action"
+            android:src="@android:drawable/ic_input_add"
+            app:backgroundTint="@color/secondary_green"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"
+            app:tint="@color/white" />
+
     </FrameLayout>
 
     <!-- FAB — add recipe -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_recipe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_input_add"
-        android:contentDescription="@string/empty_state_action"
-        app:backgroundTint="@color/secondary_green"
-        app:tint="@color/white"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp" />
 
     <!-- Bottom navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
