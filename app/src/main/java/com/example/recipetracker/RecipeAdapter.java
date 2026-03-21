@@ -1,0 +1,89 @@
+package com.example.recipetracker;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.recipetracker.database.Recipe;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * RecipeAdapter — Adapter for displaying recipes in RecyclerView
+ */
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
+
+    private List<Recipe> recipes = new ArrayList<>();
+    private OnRecipeClickListener listener;
+
+    public interface OnRecipeClickListener {
+        void onRecipeClick(Recipe recipe);
+    }
+
+    public RecipeAdapter(OnRecipeClickListener listener) {
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_recipe_card, parent, false);
+        return new RecipeViewHolder(view, listener);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
+        Recipe recipe = recipes.get(position);
+        holder.bind(recipe);
+    }
+
+    @Override
+    public int getItemCount() {
+        return recipes.size();
+    }
+
+    /**
+     * Update the list of recipes
+     */
+    public void setRecipes(List<Recipe> newRecipes) {
+        this.recipes = newRecipes != null ? newRecipes : new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    /**
+     * ViewHolder for recipe items
+     */
+    public static class RecipeViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tvTitle, tvCategory, tvPrepTime;
+        private OnRecipeClickListener listener;
+
+        public RecipeViewHolder(@NonNull View itemView, OnRecipeClickListener listener) {
+            super(itemView);
+            this.listener = listener;
+            tvTitle = itemView.findViewById(R.id.tv_card_title);
+            tvCategory = itemView.findViewById(R.id.tv_card_category);
+            tvPrepTime = itemView.findViewById(R.id.tv_card_prep_time);
+        }
+
+        public void bind(Recipe recipe) {
+            tvTitle.setText(recipe.title);
+            tvCategory.setText(recipe.category);
+            tvPrepTime.setText(recipe.prepTime + " min");
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onRecipeClick(recipe);
+                }
+            });
+        }
+    }
+}
+
+

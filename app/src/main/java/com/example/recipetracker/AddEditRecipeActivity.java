@@ -1,6 +1,8 @@
 package com.example.recipetracker;
 
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +35,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "recipe_id";
 
-    private TextInputEditText etTitle, etIngredients, etSteps, etCategory, etPrepTime;
+    private TextInputEditText etTitle, etIngredients, etSteps, etPrepTime;
+    private Spinner spinnerCategory;
     private MaterialButton btnSave, btnDelete;
 
     private RecipeDatabase db;
@@ -55,10 +58,16 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         etTitle         = findViewById(R.id.et_title);
         etIngredients   = findViewById(R.id.et_ingredients);
         etSteps         = findViewById(R.id.et_steps);
-        etCategory      = findViewById(R.id.et_category);
+        spinnerCategory = findViewById(R.id.spinner_category);
         etPrepTime      = findViewById(R.id.et_prep_time);
         btnSave         = findViewById(R.id.btn_save);
         btnDelete       = findViewById(R.id.btn_delete);
+
+        // Setup category spinner with options
+        String[] categories = {"Breakfast", "Lunch", "Dinner"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(adapter);
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,8 +99,14 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         etTitle.setText(recipeToEdit.title);
         etIngredients.setText(recipeToEdit.ingredients);
         etSteps.setText(recipeToEdit.steps);
-        etCategory.setText(recipeToEdit.category);
         etPrepTime.setText(recipeToEdit.prepTime);
+        
+        // Set spinner selection to the saved category
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinnerCategory.getAdapter();
+        if (adapter != null && recipeToEdit.category != null) {
+            int position = adapter.getPosition(recipeToEdit.category);
+            spinnerCategory.setSelection(position >= 0 ? position : 0);
+        }
     }
 
     /** Validate → save to DB → close */
@@ -99,7 +114,7 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         String title       = getText(etTitle);
         String ingredients = getText(etIngredients);
         String steps       = getText(etSteps);
-        String category    = getText(etCategory);
+        String category    = (String) spinnerCategory.getSelectedItem();
         String prepTime    = getText(etPrepTime);
 
         // Basic validation
@@ -113,6 +128,10 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         }
         if (steps.isEmpty()) {
             Toast.makeText(this, R.string.error_empty_steps, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (prepTime.isEmpty()) {
+            Toast.makeText(this, "Please enter a prep time in minutes", Toast.LENGTH_SHORT).show();
             return;
         }
 

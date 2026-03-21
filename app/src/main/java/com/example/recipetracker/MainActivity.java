@@ -38,9 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNav;
     private LinearLayout emptyStateContainer;
     private TextView greetingText;
-
-    // TODO: create a RecipeAdapter class for the RecyclerView
-    // private RecipeAdapter adapter;
+    private RecipeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +59,20 @@ public class MainActivity extends AppCompatActivity {
         // Grid: 2 columns
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        // TODO: Set up adapter and attach to recyclerView
+        // Set up adapter with click listener
+        adapter = new RecipeAdapter(recipe -> {
+            Intent intent = new Intent(this, RecipeDetailActivity.class);
+            intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, recipe.id);
+            startActivity(intent);
+        });
+        recyclerView.setAdapter(adapter);
 
         // Load all recipes from DB and show them
         RecipeDatabase.getInstance(this)
                 .recipeDao()
                 .getAllRecipes()
                 .observe(this, recipes -> {
-                    // TODO: adapter.setRecipes(recipes);
+                    adapter.setRecipes(recipes);
                     updateEmptyState(recipes != null && !recipes.isEmpty());
                 });
 
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                             .recipeDao()
                             .getAllRecipes()
                             .observe(MainActivity.this, recipes -> {
-                                // TODO: adapter.setRecipes(recipes);
+                                adapter.setRecipes(recipes);
                                 updateEmptyState(recipes != null && !recipes.isEmpty());
                             });
                 } else {
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                             .recipeDao()
                             .searchRecipes(query)
                             .observe(MainActivity.this, recipes -> {
-                                // TODO: adapter.setRecipes(recipes);
+                                adapter.setRecipes(recipes);
                                 updateEmptyState(recipes != null && !recipes.isEmpty());
                             });
                 }

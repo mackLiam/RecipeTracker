@@ -2,21 +2,22 @@
 <resources>
     <string name="app_name">RecipeBook</string>
 
+    <!-- Recipe Cards -->
+    <string name="card_category_placeholder">Category</string>
+    <string name="card_title_placeholder">Recipe Title</string>
+    <string name="card_prep_time_placeholder">30 min</string>
+
     <!-- Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_discover">Discover</string>
     <string name="nav_favourites">Favourites</string>
 
     <!-- Home Screen -->
-    <string name="home_greeting_morning">Good morning! What are you cooking?</string>
-    <string name="home_greeting_afternoon">Good afternoon! Let\'s find a recipe</string>
-    <string name="home_greeting_evening">Good evening! Ready to cook?</string>
+    <string name="home_greeting">What are you cooking today?</string>
+    <string name="home_greeting_morning">Good morning! Let\'s cook something delicious!</string>
+    <string name="home_greeting_afternoon">Good afternoon! How about a nice lunch?</string>
+    <string name="home_greeting_evening">Good evening! Time to prepare dinner!</string>
     <string name="search_hint">Search recipes…</string>
-    <string name="empty_state_title">No recipes yet</string>
-    <string name="empty_state_subtitle">Start by adding your first recipe</string>
-    <string name="empty_state_action">Create Recipe</string>
-    <string name="no_search_results">No recipes found</string>
-    <string name="recipes_count">%d recipes</string>
 
     <!-- Recipe Detail -->
     <string name="ingredients_label">Ingredients</string>
@@ -32,17 +33,12 @@
     <string name="hint_ingredients">Ingredients (one per line)</string>
     <string name="hint_steps">Steps (one per line)</string>
     <string name="hint_category">Category (e.g. Breakfast, Dinner…)</string>
-    <string name="hint_prep_time">Prep time (e.g. 30 mins)</string>
+    <string name="hint_prep_time">Prep time (minutes)</string>
     <string name="btn_save">Save Recipe</string>
     <string name="btn_delete">Delete Recipe</string>
 
     <!-- Favourites -->
     <string name="favourites_empty">No favourites yet!\nTap the ♥ on any recipe to save it.</string>
-
-    <!-- Recipe Card -->
-    <string name="card_category_placeholder">Dinner</string>
-    <string name="card_prep_time_placeholder">30 mins</string>
-    <string name="card_title_placeholder">Recipe Title</string>
 
     <!-- Discover -->
     <string name="discover_title">Discover Recipes</string>
@@ -53,4 +49,9 @@
     <string name="error_empty_steps">Please enter at least one step.</string>
     <string name="saved_success">Recipe saved!</string>
     <string name="deleted_success">Recipe deleted.</string>
+
+    <!-- Empty State -->
+    <string name="empty_state_title">No Recipes Yet</string>
+    <string name="empty_state_subtitle">Start by adding your first recipe!</string>
+    <string name="empty_state_action">Add Recipe</string>
 </resources>
