@@ -46,6 +46,12 @@ public interface RecipeDao {
     LiveData<List<Recipe>> getAllRecipes();
 
     /**
+     * Get recipes by category
+     */
+    @Query("SELECT * FROM recipes WHERE category = :category ORDER BY created_at DESC")
+    LiveData<List<Recipe>> getByCategory(String category);
+
+    /**
      * Search recipes by title, category, or ingredients
      */
     @Query("SELECT * FROM recipes WHERE title LIKE '%' || :query || '%' " +
@@ -84,5 +90,3 @@ public interface RecipeDao {
     @Query("DELETE FROM recipes")
     void deleteAll();
 }
-
-
