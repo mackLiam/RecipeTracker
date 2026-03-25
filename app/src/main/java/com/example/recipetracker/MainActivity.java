@@ -118,23 +118,21 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNav();
     }
 
-    /**
-     * Set greeting text based on current time of day
-     */
     private void setDynamicGreeting() {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
-        int greetingResId;
+        String timeGreeting;
         if (hour >= 5 && hour < 12) {
-            greetingResId = R.string.home_greeting_morning;
+            timeGreeting = "Good morning";
         } else if (hour >= 12 && hour < 17) {
-            greetingResId = R.string.home_greeting_afternoon;
+            timeGreeting = "Good afternoon";
         } else {
-            greetingResId = R.string.home_greeting_evening;
+            timeGreeting = "Good evening";
         }
 
-        greetingText.setText(greetingResId);
+        SessionManager session = new SessionManager(this);
+        greetingText.setText(timeGreeting + ", " + session.getUsername() + "! 👋");
     }
 
     /**
