@@ -64,7 +64,8 @@
                 android:contentDescription="@string/add_to_favourites"
                 android:scaleType="centerInside"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="4dp" />
+                android:padding="4dp"
+                app:tint="@color/white" />
 
         </FrameLayout>
 

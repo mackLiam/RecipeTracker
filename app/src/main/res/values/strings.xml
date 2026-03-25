@@ -38,7 +38,7 @@
     <string name="btn_delete">Delete Recipe</string>
 
     <!-- Favourites -->
-    <string name="favourites_empty">No favourites yet!\nTap the ♥ on any recipe to save it.</string>
+    <string name="favourites_empty">No favourites yet!\nTap the ★ on any recipe to save it.</string>
 
     <!-- Discover -->
     <string name="discover_title">Discover Recipes</string>

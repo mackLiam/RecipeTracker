@@ -13,6 +13,8 @@ import com.example.recipetracker.database.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.widget.ImageView;
+
 /**
  * RecipeAdapter — Adapter for displaying recipes in RecyclerView
  */
@@ -62,25 +64,40 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle, tvCategory, tvPrepTime;
+        private ImageView ivFavourite;
         private OnRecipeClickListener listener;
 
         public RecipeViewHolder(@NonNull View itemView, OnRecipeClickListener listener) {
             super(itemView);
             this.listener = listener;
-            tvTitle = itemView.findViewById(R.id.tv_card_title);
-            tvCategory = itemView.findViewById(R.id.tv_card_category);
-            tvPrepTime = itemView.findViewById(R.id.tv_card_prep_time);
+            tvTitle     = itemView.findViewById(R.id.tv_card_title);
+            tvCategory  = itemView.findViewById(R.id.tv_card_category);
+            tvPrepTime  = itemView.findViewById(R.id.tv_card_prep_time);
+            ivFavourite = itemView.findViewById(R.id.iv_card_favourite);
         }
 
         public void bind(Recipe recipe) {
             tvTitle.setText(recipe.title);
             tvCategory.setText(recipe.category);
-            tvPrepTime.setText(recipe.prepTime + " min");
+            tvPrepTime.setText(recipe.prepTime);
+
+            // Star turns yellow if favourited, white if not
+            if (recipe.isFavourite) {
+                ivFavourite.setImageResource(android.R.drawable.btn_star_big_on);
+                ivFavourite.setColorFilter(
+                        android.graphics.Color.parseColor("#FFC107"),
+                        android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            } else {
+                ivFavourite.setImageResource(android.R.drawable.btn_star_big_off);
+                ivFavourite.setColorFilter(
+                        android.graphics.Color.WHITE,
+                        android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            }
 
             itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onRecipeClick(recipe);
-                }
+                if (listener != null) listener.onRecipeClick(recipe);
             });
         }
     }
