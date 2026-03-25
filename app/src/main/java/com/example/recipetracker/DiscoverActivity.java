@@ -96,7 +96,7 @@ public class DiscoverActivity extends AppCompatActivity implements RecipeAdapter
     @Override
     public void onRecipeClick(Recipe recipe) {
         Intent intent = new Intent(this, RecipeDetailActivity.class);
-        intent.putExtra("RECIPE_ID", recipe.id); // Pass the recipe ID to the detail screen
+        intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, recipe.id);
         startActivity(intent);
     }
 

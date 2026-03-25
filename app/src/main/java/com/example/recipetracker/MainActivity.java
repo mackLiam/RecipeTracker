@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.recipetracker.database.RecipeDatabase;
+import com.example.recipetracker.util.SessionManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -68,9 +69,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // Load all recipes from DB and show them
+        SessionManager session = new SessionManager(this);
+        String username = session.getUsername();
+
         RecipeDatabase.getInstance(this)
                 .recipeDao()
-                .getAllRecipes()
+                .getRecipesByUser(username)
                 .observe(this, recipes -> {
                     adapter.setRecipes(recipes);
                     updateEmptyState(recipes != null && !recipes.isEmpty());
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     // Show all recipes
                     RecipeDatabase.getInstance(MainActivity.this)
                             .recipeDao()
-                            .getAllRecipes()
+                            .getRecipesByUser(username)
                             .observe(MainActivity.this, recipes -> {
                                 adapter.setRecipes(recipes);
                                 updateEmptyState(recipes != null && !recipes.isEmpty());

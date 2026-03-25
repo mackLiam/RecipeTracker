@@ -39,6 +39,8 @@
 
     <!-- Favourites -->
     <string name="favourites_empty">No favourites yet!\nTap the ★ on any recipe to save it.</string>
+    <!--Home -->
+    <string name="home_empty">You haven\'t added any recipes yet!\nTap the + button to add your first one.</string>
 
     <!-- Discover -->
     <string name="discover_title">Discover Recipes</string>
