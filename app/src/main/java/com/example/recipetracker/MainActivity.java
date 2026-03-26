@@ -1,12 +1,15 @@
 package com.example.recipetracker;
 
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -33,6 +36,7 @@ import java.util.Calendar;
  */
 public class MainActivity extends AppCompatActivity {
 
+
     private RecyclerView recyclerView;
     private TextInputEditText searchBar;
     private FloatingActionButton fabAdd;
@@ -53,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottom_navigation);
         emptyStateContainer = findViewById(R.id.empty_state_container);
         greetingText = findViewById(R.id.tv_greeting);
+
+        TextView btnLogout = findViewById(R.id.btn_logout);        btnLogout.setOnClickListener(v -> {
+            new SessionManager(this).logout();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
 
         // Set dynamic greeting based on time of day
         setDynamicGreeting();
@@ -116,6 +127,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Bottom nav
         setupBottomNav();
+
+
+
     }
 
     private void setDynamicGreeting() {
@@ -166,4 +180,8 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
     }
+
+
+
+
 }
