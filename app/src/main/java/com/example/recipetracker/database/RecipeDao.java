@@ -89,4 +89,7 @@ public interface RecipeDao {
      */
     @Query("DELETE FROM recipes")
     void deleteAll();
+
+    @Query("SELECT * FROM recipes WHERE created_by = :username ORDER BY created_at DESC")
+    LiveData<List<Recipe>> getRecipesByUser(String username);
 }

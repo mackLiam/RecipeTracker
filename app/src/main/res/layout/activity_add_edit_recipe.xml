@@ -62,9 +62,10 @@
                 <Spinner
                     android:id="@+id/spinner_category"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@android:drawable/dialog_frame"
-                    android:padding="12dp" />
+                    android:layout_height="52dp"
+                    android:background="@drawable/spinner_background"
+                    android:padding="12dp"
+                    android:popupBackground="@color/white" />
 
             </LinearLayout>
 

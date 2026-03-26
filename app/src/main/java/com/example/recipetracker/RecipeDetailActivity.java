@@ -115,8 +115,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private void updateFavouriteIcon() {
         if (currentRecipe.isFavourite) {
             fabFavourite.setImageResource(android.R.drawable.btn_star_big_on);
+            fabFavourite.setColorFilter(
+                    android.graphics.Color.parseColor("#FFC107"),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+            );
         } else {
             fabFavourite.setImageResource(android.R.drawable.btn_star_big_off);
+            fabFavourite.clearColorFilter();
         }
     }
 
