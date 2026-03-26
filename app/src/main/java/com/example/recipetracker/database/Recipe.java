@@ -36,6 +36,9 @@ public class Recipe {
     @ColumnInfo(name = "is_favourite")
     public boolean isFavourite;
 
+    @ColumnInfo(name = "image_url")
+    public String imageUrl;
+
     @ColumnInfo(name = "created_at")
     public long createdAt;
 
@@ -51,6 +54,7 @@ public class Recipe {
         this.createdBy = createdBy;
         this.addedByUser = createdBy; // Alias for compatibility
         this.isFavourite = false;
+        this.imageUrl = null;
         this.createdAt = System.currentTimeMillis();
     }
 
@@ -64,6 +68,3 @@ public class Recipe {
                 '}';
     }
 }
-
-
-

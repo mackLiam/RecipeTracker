@@ -20,8 +20,16 @@
         <!-- Recipe image container with gradient overlay -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="@color/primary_red">
+            android:layout_height="180dp">
+
+            <!-- Recipe Image -->
+            <ImageView
+                android:id="@+id/iv_recipe_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
+                android:background="@color/primary_red" />
 
             <!-- Gradient overlay for better text contrast -->
             <View

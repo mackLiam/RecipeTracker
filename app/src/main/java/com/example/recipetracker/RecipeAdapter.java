@@ -1,19 +1,20 @@
 package com.example.recipetracker;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.recipetracker.database.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.widget.ImageView;
 
 /**
  * RecipeAdapter — Adapter for displaying recipes in RecyclerView
@@ -64,16 +65,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle, tvCategory, tvPrepTime;
-        private ImageView ivFavourite;
+        private ImageView ivRecipeImage;
         private OnRecipeClickListener listener;
 
         public RecipeViewHolder(@NonNull View itemView, OnRecipeClickListener listener) {
             super(itemView);
             this.listener = listener;
-            tvTitle     = itemView.findViewById(R.id.tv_card_title);
-            tvCategory  = itemView.findViewById(R.id.tv_card_category);
-            tvPrepTime  = itemView.findViewById(R.id.tv_card_prep_time);
-            ivFavourite = itemView.findViewById(R.id.iv_card_favourite);
+            tvTitle = itemView.findViewById(R.id.tv_card_title);
+            tvCategory = itemView.findViewById(R.id.tv_card_category);
+            tvPrepTime = itemView.findViewById(R.id.tv_card_prep_time);
+            ivRecipeImage = itemView.findViewById(R.id.iv_recipe_image);
         }
 
         public void bind(Recipe recipe) {
@@ -81,26 +82,36 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             tvCategory.setText(recipe.category);
             tvPrepTime.setText(recipe.prepTime);
 
-            // Star turns yellow if favourited, white if not
-            if (recipe.isFavourite) {
-                ivFavourite.setImageResource(android.R.drawable.btn_star_big_on);
-                ivFavourite.setColorFilter(
-                        android.graphics.Color.parseColor("#FFC107"),
-                        android.graphics.PorterDuff.Mode.SRC_IN
-                );
+            Context context = itemView.getContext();
+
+            // Check if we have an image URL or drawable name
+            if (recipe.imageUrl != null && !recipe.imageUrl.isEmpty()) {
+                if (recipe.imageUrl.startsWith("http")) {
+                    // It's a web URL
+                    Glide.with(context)
+                            .load(recipe.imageUrl)
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivRecipeImage);
+                } else {
+                    // It's a local drawable name (e.g., "avocado_toast")
+                    int imageResId = context.getResources().getIdentifier(
+                            recipe.imageUrl, "drawable", context.getPackageName());
+                    
+                    if (imageResId != 0) {
+                        ivRecipeImage.setImageResource(imageResId);
+                    } else {
+                        ivRecipeImage.setImageResource(R.drawable.ic_launcher_background);
+                    }
+                }
             } else {
-                ivFavourite.setImageResource(android.R.drawable.btn_star_big_off);
-                ivFavourite.setColorFilter(
-                        android.graphics.Color.WHITE,
-                        android.graphics.PorterDuff.Mode.SRC_IN
-                );
+                ivRecipeImage.setImageResource(R.drawable.ic_launcher_background);
             }
 
             itemView.setOnClickListener(v -> {
-                if (listener != null) listener.onRecipeClick(recipe);
+                if (listener != null) {
+                    listener.onRecipeClick(recipe);
+                }
             });
         }
     }
 }
-
-
