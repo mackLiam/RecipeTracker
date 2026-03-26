@@ -25,7 +25,8 @@ public abstract class RecipeDatabase extends RoomDatabase {
                                     RecipeDatabase.class,
                                     "recipe_database"
                             )
-                            .addCallback(sRoomDatabaseCallback) // Connect the callback here
+                            .fallbackToDestructiveMigration()
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
@@ -33,21 +34,16 @@ public abstract class RecipeDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    /**
-     * Callback to pre-populate the database when the app is first installed.
-     */
     private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
-            // Run insertion on a background thread
             Executors.newSingleThreadExecutor().execute(() -> {
                 RecipeDao dao = INSTANCE.recipeDao();
 
-                // Create default recipes using your specific constructor:
-                // Recipe(title, ingredients, steps, category, prepTime, createdBy)
-
+                // --- UPDATE: Put the URL here for each recipe ---
+                
                 Recipe recipe1 = new Recipe(
                         "Avocado Toast",
                         "2 slices Sourdough Bread, 1 ripe Avocado, Red pepper flakes, Lemon juice, Salt",
@@ -56,6 +52,8 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "5 mins",
                         "System"
                 );
+                // PASTE THE URL HERE:
+                recipe1.imageUrl = "avocado_toast";
 
                 Recipe recipe2 = new Recipe(
                         "Classic Beef Tacos",
@@ -65,6 +63,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "15 mins",
                         "System"
                 );
+                recipe2.imageUrl = "beef_tacos";
 
                 Recipe recipe3 = new Recipe(
                         "Chicken Quesadilla",
@@ -74,6 +73,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "10 mins",
                         "System"
                 );
+                recipe3.imageUrl = "chicken_quesadilla";
 
                 Recipe recipe4 = new Recipe(
                         "Garlic Butter Shrimp",
@@ -83,6 +83,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "12 mins",
                         "System"
                 );
+                recipe4.imageUrl = "garlic_butter_shrimp";
 
                 Recipe recipe5 = new Recipe(
                         "Vegetable Stir-Fry",
@@ -92,6 +93,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "15 mins",
                         "System"
                 );
+                recipe5.imageUrl = "vegetable_stir_fry";
 
                 Recipe recipe6 = new Recipe(
                         "Chocolate Mug Cake",
@@ -101,6 +103,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "3 mins",
                         "System"
                 );
+                recipe6.imageUrl = "chocolate_mug_cake";
 
                 Recipe recipe7 = new Recipe(
                         "Caprese Skewers",
@@ -110,6 +113,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "10 mins",
                         "System"
                 );
+                recipe7.imageUrl = "caprese_skewers";
 
                 Recipe recipe8 = new Recipe(
                         "Banana Pancakes",
@@ -119,6 +123,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "10 mins",
                         "System"
                 );
+                recipe8.imageUrl = "banana_pancakes";
 
                 dao.insert(recipe1);
                 dao.insert(recipe2);

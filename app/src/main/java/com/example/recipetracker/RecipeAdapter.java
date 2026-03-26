@@ -1,13 +1,16 @@
 package com.example.recipetracker;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.recipetracker.database.Recipe;
 
 import java.util.ArrayList;
@@ -48,20 +51,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return recipes.size();
     }
 
-    /**
-     * Update the list of recipes
-     */
     public void setRecipes(List<Recipe> newRecipes) {
         this.recipes = newRecipes != null ? newRecipes : new ArrayList<>();
         notifyDataSetChanged();
     }
 
-    /**
-     * ViewHolder for recipe items
-     */
     public static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTitle, tvCategory, tvPrepTime;
+        private ImageView ivRecipeImage;
         private OnRecipeClickListener listener;
 
         public RecipeViewHolder(@NonNull View itemView, OnRecipeClickListener listener) {
@@ -70,12 +68,34 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             tvTitle = itemView.findViewById(R.id.tv_card_title);
             tvCategory = itemView.findViewById(R.id.tv_card_category);
             tvPrepTime = itemView.findViewById(R.id.tv_card_prep_time);
+            ivRecipeImage = itemView.findViewById(R.id.iv_recipe_image);
         }
 
         public void bind(Recipe recipe) {
             tvTitle.setText(recipe.title);
             tvCategory.setText(recipe.category);
-            tvPrepTime.setText(recipe.prepTime + " min");
+            tvPrepTime.setText(recipe.prepTime);
+
+            Context context = itemView.getContext();
+
+            if (recipe.imageUrl != null && !recipe.imageUrl.isEmpty()) {
+                if (recipe.imageUrl.startsWith("http")) {
+                    // It's a web URL
+                    Glide.with(context).load(recipe.imageUrl).into(ivRecipeImage);
+                } else {
+                    // It's a local drawable name (e.g., "avocado_toast")
+                    int imageResId = context.getResources().getIdentifier(
+                            recipe.imageUrl, "drawable", context.getPackageName());
+                    
+                    if (imageResId != 0) {
+                        ivRecipeImage.setImageResource(imageResId);
+                    } else {
+                        ivRecipeImage.setImageResource(R.drawable.ic_launcher_background);
+                    }
+                }
+            } else {
+                ivRecipeImage.setImageResource(R.drawable.ic_launcher_background);
+            }
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {
@@ -85,5 +105,3 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         }
     }
 }
-
-
