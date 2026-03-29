@@ -4,17 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.recipetracker.database.Recipe;
 import com.example.recipetracker.database.RecipeDatabase;
 import com.example.recipetracker.util.SessionManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.File;
 
 /**
  * RecipeDetailActivity — shows full recipe info and handles sharing/favoriting
@@ -24,6 +29,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     public static final String EXTRA_RECIPE_ID = "recipe_id";
 
     private TextView tvTitle, tvCategory, tvPrepTime, tvIngredients, tvSteps;
+    private ImageView ivDetailImage;
     private FloatingActionButton fabFavourite;
     private MaterialButton btnEdit;
 
@@ -46,6 +52,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         tvPrepTime        = findViewById(R.id.tv_prep_time);
         tvIngredients     = findViewById(R.id.tv_ingredients);
         tvSteps           = findViewById(R.id.tv_steps);
+        ivDetailImage     = findViewById(R.id.iv_detail_image);
         fabFavourite      = findViewById(R.id.fab_favourite);
         btnEdit           = findViewById(R.id.btn_edit);
 
@@ -86,6 +93,26 @@ public class RecipeDetailActivity extends AppCompatActivity {
         tvIngredients.setText(currentRecipe.ingredients);
         tvSteps.setText(currentRecipe.steps);
 
+        // Load recipe image
+        if (currentRecipe.imageUrl != null && !currentRecipe.imageUrl.isEmpty()) {
+            ivDetailImage.setVisibility(View.VISIBLE);
+            if (currentRecipe.imageUrl.startsWith("http")) {
+                Glide.with(this).load(currentRecipe.imageUrl).into(ivDetailImage);
+            } else if (currentRecipe.imageUrl.startsWith("/")) {
+                Glide.with(this).load(new File(currentRecipe.imageUrl)).into(ivDetailImage);
+            } else {
+                int resId = getResources().getIdentifier(
+                        currentRecipe.imageUrl, "drawable", getPackageName());
+                if (resId != 0) {
+                    ivDetailImage.setImageResource(resId);
+                } else {
+                    ivDetailImage.setVisibility(View.GONE);
+                }
+            }
+        } else {
+            ivDetailImage.setVisibility(View.GONE);
+        }
+
         // Favourite icon state
         updateFavouriteIcon();
 
@@ -100,7 +127,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         // Only show Edit button if this user added the recipe
         String currentUser = session.getUsername();
-        if (currentUser != null && currentUser.equals(currentRecipe.addedByUser)) {
+        if (currentUser != null && currentUser.equals(currentRecipe.createdBy)) {
             btnEdit.setVisibility(android.view.View.VISIBLE);
             btnEdit.setOnClickListener(v -> {
                 Intent intent = new Intent(this, AddEditRecipeActivity.class);
@@ -115,8 +142,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private void updateFavouriteIcon() {
         if (currentRecipe.isFavourite) {
             fabFavourite.setImageResource(android.R.drawable.btn_star_big_on);
+            fabFavourite.setImageTintList(
+                    android.content.res.ColorStateList.valueOf(0xFFFFD700)); // gold
         } else {
             fabFavourite.setImageResource(android.R.drawable.btn_star_big_off);
+            fabFavourite.setImageTintList(
+                    android.content.res.ColorStateList.valueOf(0xFFFFFFFF)); // white
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.recipetracker.database.Recipe;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
             Context context = itemView.getContext();
 
-            // Check if we have an image URL or drawable name
+            // Check if we have an image URL, file path, or drawable name
             if (recipe.imageUrl != null && !recipe.imageUrl.isEmpty()) {
                 if (recipe.imageUrl.startsWith("http")) {
                     // It's a web URL
@@ -92,11 +93,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                             .load(recipe.imageUrl)
                             .placeholder(R.drawable.ic_launcher_background)
                             .into(ivRecipeImage);
+                } else if (recipe.imageUrl.startsWith("/")) {
+                    // It's a file path to a user-selected photo
+                    Glide.with(context)
+                            .load(new File(recipe.imageUrl))
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(ivRecipeImage);
                 } else {
                     // It's a local drawable name (e.g., "avocado_toast")
                     int imageResId = context.getResources().getIdentifier(
                             recipe.imageUrl, "drawable", context.getPackageName());
-                    
+
                     if (imageResId != 0) {
                         ivRecipeImage.setImageResource(imageResId);
                     } else {

@@ -24,6 +24,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Recipe photo -->
+            <ImageView
+                android:id="@+id/iv_detail_image"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:scaleType="centerCrop"
+                android:background="@color/divider"
+                android:contentDescription="Recipe photo"
+                android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/screen_padding">
 
@@ -116,6 +131,8 @@
 
         </LinearLayout>
 
+        </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <!-- Favourite FAB -->
@@ -127,7 +144,6 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/btn_star_big_off"
         android:contentDescription="Toggle favourite"
-        app:backgroundTint="@color/watermelon_red"
-        app:tint="@color/white" />
+        app:backgroundTint="@color/watermelon_red" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

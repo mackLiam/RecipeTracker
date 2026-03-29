@@ -1,18 +1,28 @@
 package com.example.recipetracker;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.recipetracker.database.Recipe;
 import com.example.recipetracker.database.RecipeDatabase;
 import com.example.recipetracker.util.SessionManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * AddEditRecipeActivity — Add a new recipe OR edit an existing one.
@@ -37,13 +47,30 @@ public class AddEditRecipeActivity extends AppCompatActivity {
 
     private TextInputEditText etTitle, etIngredients, etSteps, etPrepTime;
     private Spinner spinnerCategory;
-    private MaterialButton btnSave, btnDelete;
+    private MaterialButton btnSave, btnDelete, btnAddPhoto;
+    private ImageView ivRecipePhoto;
 
     private RecipeDatabase db;
     private SessionManager session;
 
     /** null = adding new recipe, non-null = editing existing */
     private Recipe recipeToEdit = null;
+
+    /** File path of newly selected photo, null if no change */
+    private String selectedImagePath = null;
+
+    private final ActivityResultLauncher<String> imagePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    String path = copyImageToInternalStorage(uri);
+                    if (path != null) {
+                        selectedImagePath = path;
+                        Glide.with(this).load(new File(path)).into(ivRecipePhoto);
+                    } else {
+                        Toast.makeText(this, "Failed to save photo", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +89,10 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         etPrepTime      = findViewById(R.id.et_prep_time);
         btnSave         = findViewById(R.id.btn_save);
         btnDelete       = findViewById(R.id.btn_delete);
+        btnAddPhoto     = findViewById(R.id.btn_add_photo);
+        ivRecipePhoto   = findViewById(R.id.iv_recipe_photo);
+
+        btnAddPhoto.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
         // Setup category spinner with options
         String[] categories = {"Breakfast", "Lunch", "Dinner"};
@@ -100,12 +131,20 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         etIngredients.setText(recipeToEdit.ingredients);
         etSteps.setText(recipeToEdit.steps);
         etPrepTime.setText(recipeToEdit.prepTime);
-        
+
         // Set spinner selection to the saved category
         ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinnerCategory.getAdapter();
         if (adapter != null && recipeToEdit.category != null) {
             int position = adapter.getPosition(recipeToEdit.category);
             spinnerCategory.setSelection(position >= 0 ? position : 0);
+        }
+
+        // Show existing photo if present
+        if (recipeToEdit.imageUrl != null && !recipeToEdit.imageUrl.isEmpty()) {
+            File imageFile = new File(recipeToEdit.imageUrl);
+            if (imageFile.exists()) {
+                Glide.with(this).load(imageFile).into(ivRecipePhoto);
+            }
         }
     }
 
@@ -142,6 +181,9 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                         title, ingredients, steps,
                         category, prepTime, session.getUsername()
                 );
+                if (selectedImagePath != null) {
+                    newRecipe.imageUrl = selectedImagePath;
+                }
                 db.recipeDao().insert(newRecipe);
             } else {
                 // UPDATE existing
@@ -150,6 +192,9 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                 recipeToEdit.steps       = steps;
                 recipeToEdit.category    = category;
                 recipeToEdit.prepTime    = prepTime;
+                if (selectedImagePath != null) {
+                    recipeToEdit.imageUrl = selectedImagePath;
+                }
                 db.recipeDao().update(recipeToEdit);
             }
             runOnUiThread(() -> {
@@ -169,6 +214,25 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                 finish();
             });
         }).start();
+    }
+
+    /** Copy a content URI image into the app's internal storage and return the file path */
+    private String copyImageToInternalStorage(Uri sourceUri) {
+        try {
+            String filename = "recipe_photo_" + System.currentTimeMillis() + ".jpg";
+            File destFile = new File(getFilesDir(), filename);
+            try (InputStream in = getContentResolver().openInputStream(sourceUri);
+                 OutputStream out = new FileOutputStream(destFile)) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+            }
+            return destFile.getAbsolutePath();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /** Helper — safely get trimmed text from an EditText */
