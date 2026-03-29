@@ -140,6 +140,23 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Added by -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.RecipeBook.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Added by"
+                android:layout_marginBottom="24dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_added_by"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Save button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_save"

@@ -45,7 +45,7 @@ public class AddEditRecipeActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "recipe_id";
 
-    private TextInputEditText etTitle, etIngredients, etSteps, etPrepTime;
+    private TextInputEditText etTitle, etIngredients, etSteps, etPrepTime, etAddedBy;
     private Spinner spinnerCategory;
     private MaterialButton btnSave, btnDelete, btnAddPhoto;
     private ImageView ivRecipePhoto;
@@ -91,6 +91,7 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         btnDelete       = findViewById(R.id.btn_delete);
         btnAddPhoto     = findViewById(R.id.btn_add_photo);
         ivRecipePhoto   = findViewById(R.id.iv_recipe_photo);
+        etAddedBy       = findViewById(R.id.et_added_by);
 
         btnAddPhoto.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
@@ -102,6 +103,9 @@ public class AddEditRecipeActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Pre-fill "Added by" with current username (editable)
+        etAddedBy.setText(session.getUsername());
 
         // Check if we're editing
         int recipeId = getIntent().getIntExtra(EXTRA_RECIPE_ID, -1);
@@ -139,6 +143,11 @@ public class AddEditRecipeActivity extends AppCompatActivity {
             spinnerCategory.setSelection(position >= 0 ? position : 0);
         }
 
+        // Show the saved creator (overrides the session default set in onCreate)
+        if (recipeToEdit.createdBy != null) {
+            etAddedBy.setText(recipeToEdit.createdBy);
+        }
+
         // Show existing photo if present
         if (recipeToEdit.imageUrl != null && !recipeToEdit.imageUrl.isEmpty()) {
             File imageFile = new File(recipeToEdit.imageUrl);
@@ -155,6 +164,7 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         String steps       = getText(etSteps);
         String category    = (String) spinnerCategory.getSelectedItem();
         String prepTime    = getText(etPrepTime);
+        String addedBy     = getText(etAddedBy);
 
         // Basic validation
         if (title.isEmpty()) {
@@ -179,7 +189,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                 // INSERT new
                 Recipe newRecipe = new Recipe(
                         title, ingredients, steps,
-                        category, prepTime, session.getUsername()
+                        category, prepTime,
+                        addedBy.isEmpty() ? session.getUsername() : addedBy
                 );
                 if (selectedImagePath != null) {
                     newRecipe.imageUrl = selectedImagePath;
@@ -192,6 +203,7 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                 recipeToEdit.steps       = steps;
                 recipeToEdit.category    = category;
                 recipeToEdit.prepTime    = prepTime;
+                recipeToEdit.createdBy   = addedBy.isEmpty() ? recipeToEdit.createdBy : addedBy;
                 if (selectedImagePath != null) {
                     recipeToEdit.imageUrl = selectedImagePath;
                 }

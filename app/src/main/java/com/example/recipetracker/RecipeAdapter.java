@@ -65,7 +65,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
      */
     public static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvTitle, tvCategory, tvPrepTime;
+        private TextView tvTitle, tvCategory, tvPrepTime, tvCreatedBy;
         private ImageView ivRecipeImage;
         private OnRecipeClickListener listener;
 
@@ -75,6 +75,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             tvTitle = itemView.findViewById(R.id.tv_card_title);
             tvCategory = itemView.findViewById(R.id.tv_card_category);
             tvPrepTime = itemView.findViewById(R.id.tv_card_prep_time);
+            tvCreatedBy = itemView.findViewById(R.id.tv_card_created_by);
             ivRecipeImage = itemView.findViewById(R.id.iv_recipe_image);
         }
 
@@ -82,6 +83,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             tvTitle.setText(recipe.title);
             tvCategory.setText(recipe.category);
             tvPrepTime.setText(recipe.prepTime);
+
+            // Show creator label
+            if ("System".equals(recipe.createdBy)) {
+                tvCreatedBy.setText("System Recipe");
+            } else if (recipe.createdBy != null && !recipe.createdBy.isEmpty()) {
+                tvCreatedBy.setText("By " + recipe.createdBy);
+            } else {
+                tvCreatedBy.setText("");
+            }
 
             Context context = itemView.getContext();
 
