@@ -38,18 +38,16 @@
                 android:layout_gravity="bottom"
                 android:background="@android:color/transparent" />
 
-            <!-- Category badge -->
+            <!-- Category + difficulty badges at the bottom of the image -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|start"
+                android:layout_gravity="bottom"
                 android:layout_margin="12dp"
-                android:background="#B3000000"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center_vertical">
 
+                <!-- Category badge -->
                 <TextView
                     android:id="@+id/tv_card_category"
                     android:layout_width="wrap_content"
@@ -57,7 +55,23 @@
                     android:text="@string/card_category_placeholder"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:background="#B3000000"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp" />
+
+                <!-- Difficulty badge -->
+                <TextView
+                    android:id="@+id/tv_card_difficulty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

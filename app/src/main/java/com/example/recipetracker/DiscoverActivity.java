@@ -23,8 +23,14 @@ public class DiscoverActivity extends AppCompatActivity implements RecipeAdapter
 
     private RecyclerView recyclerView;
     private ChipGroup chipGroupCategories;
+    private ChipGroup chipGroupPrepTime;
     private BottomNavigationView bottomNav;
     private RecipeAdapter adapter;
+
+    // Which category chip is selected, null means "All"
+    private String currentCategory = null;
+    // Which prep time chip is selected, 0 means no filter
+    private int currentMaxMins = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,7 @@ public class DiscoverActivity extends AppCompatActivity implements RecipeAdapter
         Toolbar toolbar     = findViewById(R.id.toolbar);
         recyclerView        = findViewById(R.id.recycler_discover);
         chipGroupCategories = findViewById(R.id.chip_group_categories);
+        chipGroupPrepTime   = findViewById(R.id.chip_group_prep_time);
         bottomNav           = findViewById(R.id.bottom_navigation);
 
         setSupportActionBar(toolbar);
@@ -44,48 +51,71 @@ public class DiscoverActivity extends AppCompatActivity implements RecipeAdapter
         adapter = new RecipeAdapter(this); // 'this' refers to the OnRecipeClickListener implementation below
         recyclerView.setAdapter(adapter);
 
-        // --- UPDATED: Initial load (shows random recipes when screen first opens) ---
-        loadRecipes(null);
+        loadRecipes();
 
-        // --- UPDATED: Listen for category filter changes ---
         chipGroupCategories.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (checkedIds.isEmpty()) {
-                // If no chip is selected, default back to random recipes
-                loadRecipes(null);
+                currentCategory = null;
             } else {
-                // Get the text from the selected chip (e.g., "Breakfast", "Lunch")
-                int chipId = checkedIds.get(0);
-                Chip chip = findViewById(chipId);
-                String category = chip.getText().toString();
-
-                if (category.equalsIgnoreCase("All")) {
-                    loadRecipes(null); // Load random if "All" is selected
+                Chip chip = findViewById(checkedIds.get(0));
+                String label = chip.getText().toString();
+                // "All" chip means no category filter
+                if (label.equalsIgnoreCase("All")) {
+                    currentCategory = null;
                 } else {
-                    loadRecipes(category); // Filter by the specific category
+                    currentCategory = label;
                 }
             }
+            loadRecipes();
+        });
+
+        chipGroupPrepTime.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (checkedIds.isEmpty()) {
+                currentMaxMins = 0;
+            } else {
+                int chipId = checkedIds.get(0);
+                if (chipId == R.id.chip_time_10) {
+                    currentMaxMins = 10;
+                } else if (chipId == R.id.chip_time_20) {
+                    currentMaxMins = 20;
+                } else if (chipId == R.id.chip_time_30) {
+                    currentMaxMins = 30;
+                } else {
+                    currentMaxMins = 0;
+                }
+            }
+            loadRecipes();
         });
 
         setupBottomNav();
     }
 
-    /**
-     * Helper method to fetch recipes from the database.
-     * @param category If null, loads random recipes. Otherwise, filters by category.
-     */
-    private void loadRecipes(String category) {
-        if (category == null) {
-            // --- UPDATED: Fetch random recipes using LiveData ---
-            RecipeDatabase.getInstance(this)
-                    .recipeDao()
-                    .getRandomRecipes()
-                    .observe(this, recipes -> adapter.setRecipes(recipes));
+    private void loadRecipes() {
+        RecipeDatabase db = RecipeDatabase.getInstance(this);
+
+        // No filters — show random recipes
+        if (currentCategory == null && currentMaxMins == 0) {
+            db.recipeDao().getRandomRecipes().observe(this, recipes -> {
+                adapter.setRecipes(recipes);
+            });
+
+        // Only prep time filter is active
+        } else if (currentCategory == null) {
+            db.recipeDao().getAllWithMaxPrepTime(currentMaxMins).observe(this, recipes -> {
+                adapter.setRecipes(recipes);
+            });
+
+        // Only category filter is active
+        } else if (currentMaxMins == 0) {
+            db.recipeDao().getByCategory(currentCategory).observe(this, recipes -> {
+                adapter.setRecipes(recipes);
+            });
+
+        // Both filters are active
         } else {
-            // --- UPDATED: Fetch recipes specifically for the chosen category ---
-            RecipeDatabase.getInstance(this)
-                    .recipeDao()
-                    .getByCategory(category)
-                    .observe(this, recipes -> adapter.setRecipes(recipes));
+            db.recipeDao().getByCategoryAndMaxPrepTime(currentCategory, currentMaxMins).observe(this, recipes -> {
+                adapter.setRecipes(recipes);
+            });
         }
     }
 

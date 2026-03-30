@@ -54,6 +54,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                 );
                 // PASTE THE URL HERE:
                 recipe1.imageUrl = "avocado_toast";
+                recipe1.difficulty = "Easy";
 
                 Recipe recipe2 = new Recipe(
                         "Classic Beef Tacos",
@@ -64,6 +65,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "System"
                 );
                 recipe2.imageUrl = "beef_tacos";
+                recipe2.difficulty = "Easy";
 
                 Recipe recipe3 = new Recipe(
                         "Chicken Quesadilla",
@@ -74,6 +76,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "System"
                 );
                 recipe3.imageUrl = "chicken_quesadilla";
+                recipe3.difficulty = "Easy";
 
                 Recipe recipe4 = new Recipe(
                         "Garlic Butter Shrimp",
@@ -84,6 +87,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "System"
                 );
                 recipe4.imageUrl = "garlic_butter_shrimp";
+                recipe4.difficulty = "Medium";
 
                 Recipe recipe5 = new Recipe(
                         "Vegetable Stir-Fry",
@@ -94,6 +98,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "System"
                 );
                 recipe5.imageUrl = "vegetable_stir_fry";
+                recipe5.difficulty = "Medium";
 
                 Recipe recipe6 = new Recipe(
                         "Chocolate Mug Cake",
@@ -104,6 +109,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "System"
                 );
                 recipe6.imageUrl = "chocolate_mug_cake";
+                recipe6.difficulty = "Easy";
 
                 Recipe recipe7 = new Recipe(
                         "Caprese Skewers",
@@ -114,6 +120,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "System"
                 );
                 recipe7.imageUrl = "caprese_skewers";
+                recipe7.difficulty = "Easy";
 
                 Recipe recipe8 = new Recipe(
                         "Banana Pancakes",
@@ -124,6 +131,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
                         "System"
                 );
                 recipe8.imageUrl = "banana_pancakes";
+                recipe8.difficulty = "Medium";
 
                 dao.insert(recipe1);
                 dao.insert(recipe2);

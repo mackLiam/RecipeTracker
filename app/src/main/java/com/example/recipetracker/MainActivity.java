@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -44,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout emptyStateContainer;
     private TextView greetingText;
     private RecipeAdapter adapter;
+
+    // Keeps track of which sort the user picked
+    private String currentSort = "newest";
+    private String currentUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +86,31 @@ public class MainActivity extends AppCompatActivity {
 
         // Load all recipes from DB and show them
         SessionManager session = new SessionManager(this);
-        String username = session.getUsername();
+        currentUsername = session.getUsername();
 
-        RecipeDatabase.getInstance(this)
-                .recipeDao()
-                .getRecipesByUser(username)
-                .observe(this, recipes -> {
-                    adapter.setRecipes(recipes);
-                    updateEmptyState(recipes != null && !recipes.isEmpty());
-                });
+        loadSortedRecipes();
+
+        // Sort button → popup menu
+        ImageButton btnSort = findViewById(R.id.btn_sort);
+        btnSort.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(this, v);
+            popup.getMenu().add("Newest first");
+            popup.getMenu().add("A-Z");
+            popup.getMenu().add("Oldest first");
+            popup.setOnMenuItemClickListener(item -> {
+                String selected = item.getTitle().toString();
+                if (selected.equals("Newest first")) {
+                    currentSort = "newest";
+                } else if (selected.equals("A-Z")) {
+                    currentSort = "az";
+                } else {
+                    currentSort = "oldest";
+                }
+                loadSortedRecipes();
+                return true;
+            });
+            popup.show();
+        });
 
         // Live search — fires every time the user types
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -97,16 +118,8 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().trim();
                 if (query.isEmpty()) {
-                    // Show all recipes
-                    RecipeDatabase.getInstance(MainActivity.this)
-                            .recipeDao()
-                            .getRecipesByUser(username)
-                            .observe(MainActivity.this, recipes -> {
-                                adapter.setRecipes(recipes);
-                                updateEmptyState(recipes != null && !recipes.isEmpty());
-                            });
+                    loadSortedRecipes();
                 } else {
-                    // Search recipes
                     RecipeDatabase.getInstance(MainActivity.this)
                             .recipeDao()
                             .searchRecipes(query)
@@ -130,6 +143,30 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void loadSortedRecipes() {
+        RecipeDatabase db = RecipeDatabase.getInstance(this);
+
+        if (currentSort.equals("az")) {
+            // Sort alphabetically A-Z
+            db.recipeDao().getRecipesByUserAlphabetical(currentUsername).observe(this, recipes -> {
+                adapter.setRecipes(recipes);
+                updateEmptyState(recipes != null && !recipes.isEmpty());
+            });
+        } else if (currentSort.equals("oldest")) {
+            // Sort by oldest first
+            db.recipeDao().getRecipesByUserOldest(currentUsername).observe(this, recipes -> {
+                adapter.setRecipes(recipes);
+                updateEmptyState(recipes != null && !recipes.isEmpty());
+            });
+        } else {
+            // Default: newest first
+            db.recipeDao().getRecipesByUser(currentUsername).observe(this, recipes -> {
+                adapter.setRecipes(recipes);
+                updateEmptyState(recipes != null && !recipes.isEmpty());
+            });
+        }
     }
 
     private void setDynamicGreeting() {

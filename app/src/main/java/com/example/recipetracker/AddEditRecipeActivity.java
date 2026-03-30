@@ -45,8 +45,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "recipe_id";
 
-    private TextInputEditText etTitle, etIngredients, etSteps, etPrepTime, etAddedBy;
-    private Spinner spinnerCategory;
+    private TextInputEditText etTitle, etIngredients, etSteps, etPrepTime, etAddedBy, etNotes;
+    private Spinner spinnerCategory, spinnerDifficulty;
     private MaterialButton btnSave, btnDelete, btnAddPhoto;
     private ImageView ivRecipePhoto;
 
@@ -91,7 +91,9 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         btnDelete       = findViewById(R.id.btn_delete);
         btnAddPhoto     = findViewById(R.id.btn_add_photo);
         ivRecipePhoto   = findViewById(R.id.iv_recipe_photo);
-        etAddedBy       = findViewById(R.id.et_added_by);
+        etAddedBy         = findViewById(R.id.et_added_by);
+        etNotes           = findViewById(R.id.et_notes);
+        spinnerDifficulty = findViewById(R.id.spinner_difficulty);
 
         btnAddPhoto.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
@@ -100,6 +102,12 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
+
+        // Setup difficulty spinner
+        String[] difficulties = {"Easy", "Medium", "Hard"};
+        ArrayAdapter<String> difficultyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, difficulties);
+        difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDifficulty.setAdapter(difficultyAdapter);
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -148,6 +156,18 @@ public class AddEditRecipeActivity extends AppCompatActivity {
             etAddedBy.setText(recipeToEdit.createdBy);
         }
 
+        // Pre-fill difficulty
+        if (recipeToEdit.difficulty != null) {
+            ArrayAdapter<String> diffAdapter = (ArrayAdapter<String>) spinnerDifficulty.getAdapter();
+            int diffPosition = diffAdapter.getPosition(recipeToEdit.difficulty);
+            spinnerDifficulty.setSelection(diffPosition >= 0 ? diffPosition : 0);
+        }
+
+        // Pre-fill notes
+        if (recipeToEdit.notes != null) {
+            etNotes.setText(recipeToEdit.notes);
+        }
+
         // Show existing photo if present
         if (recipeToEdit.imageUrl != null && !recipeToEdit.imageUrl.isEmpty()) {
             File imageFile = new File(recipeToEdit.imageUrl);
@@ -165,6 +185,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
         String category    = (String) spinnerCategory.getSelectedItem();
         String prepTime    = getText(etPrepTime);
         String addedBy     = getText(etAddedBy);
+        String notes       = getText(etNotes);
+        String difficulty  = (String) spinnerDifficulty.getSelectedItem();
 
         // Basic validation
         if (title.isEmpty()) {
@@ -195,6 +217,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                 if (selectedImagePath != null) {
                     newRecipe.imageUrl = selectedImagePath;
                 }
+                newRecipe.notes      = notes.isEmpty() ? null : notes;
+                newRecipe.difficulty = difficulty;
                 db.recipeDao().insert(newRecipe);
             } else {
                 // UPDATE existing
@@ -204,6 +228,8 @@ public class AddEditRecipeActivity extends AppCompatActivity {
                 recipeToEdit.category    = category;
                 recipeToEdit.prepTime    = prepTime;
                 recipeToEdit.createdBy   = addedBy.isEmpty() ? recipeToEdit.createdBy : addedBy;
+                recipeToEdit.notes       = notes.isEmpty() ? null : notes;
+                recipeToEdit.difficulty  = difficulty;
                 if (selectedImagePath != null) {
                     recipeToEdit.imageUrl = selectedImagePath;
                 }

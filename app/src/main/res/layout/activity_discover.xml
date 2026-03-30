@@ -92,6 +92,64 @@
 
     </HorizontalScrollView>
 
+    <!-- Prep time filter chips -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_prep_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_time_any"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Any time"
+                android:checked="true"
+                app:chipBackgroundColor="@color/watermelon_red"
+                app:chipStrokeColor="@color/watermelon_red"
+                android:textColor="@color/white" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_time_10"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Under 10 min"
+                app:chipStrokeColor="@color/watermelon_red"
+                android:textColor="@color/text_primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_time_20"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Under 20 min"
+                app:chipStrokeColor="@color/watermelon_red"
+                android:textColor="@color/text_primary" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_time_30"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Under 30 min"
+                app:chipStrokeColor="@color/watermelon_red"
+                android:textColor="@color/text_primary" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
+
     <!-- Recipe list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_discover"

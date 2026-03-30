@@ -53,7 +53,7 @@
                 android:layout_marginBottom="8dp"
                 android:text="Recipe Title" />
 
-            <!-- Category + Prep time row -->
+            <!-- Category + Prep time + Difficulty row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,6 +67,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Category" />
+
+                <TextView
+                    android:id="@+id/tv_difficulty"
+                    style="@style/TextAppearance.RecipeBook.CardSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_prep_time"
@@ -119,6 +127,26 @@
                 android:lineSpacingMultiplier="1.6"
                 android:layout_marginBottom="32dp"
                 android:text="Steps go here" />
+
+            <!-- Notes section (only visible when notes exist) -->
+            <TextView
+                android:id="@+id/tv_notes_header"
+                style="@style/TextAppearance.RecipeBook.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My Notes"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:lineSpacingMultiplier="1.6"
+                android:layout_marginBottom="24dp"
+                android:visibility="gone" />
 
             <!-- Edit button (only visible if current user added this recipe) -->
             <com.google.android.material.button.MaterialButton

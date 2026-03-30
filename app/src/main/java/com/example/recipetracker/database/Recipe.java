@@ -42,6 +42,12 @@ public class Recipe {
     @ColumnInfo(name = "created_at")
     public long createdAt;
 
+    @ColumnInfo(name = "notes")
+    public String notes;
+
+    @ColumnInfo(name = "difficulty")
+    public String difficulty;
+
     /**
      * Constructor for creating new recipes
      */

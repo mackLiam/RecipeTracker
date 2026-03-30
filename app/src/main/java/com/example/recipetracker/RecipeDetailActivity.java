@@ -28,7 +28,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "recipe_id";
 
-    private TextView tvTitle, tvCategory, tvPrepTime, tvIngredients, tvSteps;
+    private TextView tvTitle, tvCategory, tvPrepTime, tvIngredients, tvSteps, tvNotes, tvNotesHeader, tvDifficulty;
     private ImageView ivDetailImage;
     private FloatingActionButton fabFavourite;
     private MaterialButton btnEdit;
@@ -52,6 +52,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
         tvPrepTime        = findViewById(R.id.tv_prep_time);
         tvIngredients     = findViewById(R.id.tv_ingredients);
         tvSteps           = findViewById(R.id.tv_steps);
+        tvNotesHeader     = findViewById(R.id.tv_notes_header);
+        tvNotes           = findViewById(R.id.tv_notes);
+        tvDifficulty      = findViewById(R.id.tv_difficulty);
         ivDetailImage     = findViewById(R.id.iv_detail_image);
         fabFavourite      = findViewById(R.id.fab_favourite);
         btnEdit           = findViewById(R.id.btn_edit);
@@ -82,6 +85,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         tvTitle.setText(currentRecipe.title);
         tvCategory.setText(currentRecipe.category);
+
+        // Show difficulty if set
+        if (currentRecipe.difficulty != null && !currentRecipe.difficulty.isEmpty()) {
+            tvDifficulty.setVisibility(android.view.View.VISIBLE);
+            tvDifficulty.setText(currentRecipe.difficulty);
+        } else {
+            tvDifficulty.setVisibility(android.view.View.GONE);
+        }
         
         // Show prep time (ensure "mins" isn't doubled in UI)
         String time = currentRecipe.prepTime;
@@ -92,6 +103,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
         
         tvIngredients.setText(currentRecipe.ingredients);
         tvSteps.setText(currentRecipe.steps);
+
+        // Show notes section only if notes exist
+        if (currentRecipe.notes != null && !currentRecipe.notes.isEmpty()) {
+            tvNotesHeader.setVisibility(android.view.View.VISIBLE);
+            tvNotes.setVisibility(android.view.View.VISIBLE);
+            tvNotes.setText(currentRecipe.notes);
+        } else {
+            tvNotesHeader.setVisibility(android.view.View.GONE);
+            tvNotes.setVisibility(android.view.View.GONE);
+        }
 
         // Load recipe image
         if (currentRecipe.imageUrl != null && !currentRecipe.imageUrl.isEmpty()) {

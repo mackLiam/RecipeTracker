@@ -92,4 +92,16 @@ public interface RecipeDao {
 
     @Query("SELECT * FROM recipes WHERE created_by = :username ORDER BY created_at DESC")
     LiveData<List<Recipe>> getRecipesByUser(String username);
+
+    @Query("SELECT * FROM recipes WHERE created_by = :username ORDER BY title ASC")
+    LiveData<List<Recipe>> getRecipesByUserAlphabetical(String username);
+
+    @Query("SELECT * FROM recipes WHERE created_by = :username ORDER BY created_at ASC")
+    LiveData<List<Recipe>> getRecipesByUserOldest(String username);
+
+    @Query("SELECT * FROM recipes WHERE CAST(prep_time AS INTEGER) <= :maxMins ORDER BY RANDOM() LIMIT 20")
+    LiveData<List<Recipe>> getAllWithMaxPrepTime(int maxMins);
+
+    @Query("SELECT * FROM recipes WHERE category = :category AND CAST(prep_time AS INTEGER) <= :maxMins ORDER BY created_at DESC")
+    LiveData<List<Recipe>> getByCategoryAndMaxPrepTime(String category, int maxMins);
 }

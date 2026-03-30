@@ -65,30 +65,49 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
-        <!-- Search bar with Material 3 styling -->
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Search bar + sort button row -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="@string/search_hint"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxStrokeColor="@color/white"
-            app:hintTextColor="@color/white"
-            app:startIconDrawable="@android:drawable/ic_menu_search"
-            app:startIconTint="@color/white">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"
-                android:imeOptions="actionSearch"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/primary_red_light"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="@string/search_hint"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/white"
+                app:hintTextColor="@color/white"
+                app:startIconDrawable="@android:drawable/ic_menu_search"
+                app:startIconTint="@color/white">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/primary_red_light"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/btn_sort"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="8dp"
+                android:src="@android:drawable/ic_menu_sort_by_size"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Sort recipes"
+                android:tint="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

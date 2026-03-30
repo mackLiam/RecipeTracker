@@ -1,6 +1,7 @@
 package com.example.recipetracker;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,17 +66,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
      */
     public static class RecipeViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvTitle, tvCategory, tvPrepTime, tvCreatedBy;
+        private TextView tvTitle, tvCategory, tvPrepTime, tvCreatedBy, tvDifficulty;
         private ImageView ivRecipeImage;
         private OnRecipeClickListener listener;
 
         public RecipeViewHolder(@NonNull View itemView, OnRecipeClickListener listener) {
             super(itemView);
             this.listener = listener;
-            tvTitle = itemView.findViewById(R.id.tv_card_title);
-            tvCategory = itemView.findViewById(R.id.tv_card_category);
-            tvPrepTime = itemView.findViewById(R.id.tv_card_prep_time);
-            tvCreatedBy = itemView.findViewById(R.id.tv_card_created_by);
+            tvTitle      = itemView.findViewById(R.id.tv_card_title);
+            tvCategory   = itemView.findViewById(R.id.tv_card_category);
+            tvPrepTime   = itemView.findViewById(R.id.tv_card_prep_time);
+            tvCreatedBy  = itemView.findViewById(R.id.tv_card_created_by);
+            tvDifficulty = itemView.findViewById(R.id.tv_card_difficulty);
             ivRecipeImage = itemView.findViewById(R.id.iv_recipe_image);
         }
 
@@ -83,6 +85,23 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             tvTitle.setText(recipe.title);
             tvCategory.setText(recipe.category);
             tvPrepTime.setText(recipe.prepTime);
+
+            // Show difficulty badge if set, hide it if not
+            if (recipe.difficulty != null && !recipe.difficulty.isEmpty()) {
+                tvDifficulty.setVisibility(View.VISIBLE);
+                tvDifficulty.setText(recipe.difficulty);
+
+                // Color the badge green, orange, or red based on difficulty
+                if (recipe.difficulty.equals("Easy")) {
+                    tvDifficulty.setBackgroundColor(Color.parseColor("#4CAF50")); // green
+                } else if (recipe.difficulty.equals("Medium")) {
+                    tvDifficulty.setBackgroundColor(Color.parseColor("#FF9800")); // orange
+                } else {
+                    tvDifficulty.setBackgroundColor(Color.parseColor("#F44336")); // red
+                }
+            } else {
+                tvDifficulty.setVisibility(View.GONE);
+            }
 
             // Show creator label
             if ("System".equals(recipe.createdBy)) {

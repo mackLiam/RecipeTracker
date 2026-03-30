@@ -87,6 +87,31 @@
 
             </LinearLayout>
 
+            <!-- Difficulty -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Difficulty"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_difficulty"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/spinner_background"
+                    android:padding="12dp"
+                    android:popupBackground="@color/white" />
+
+            </LinearLayout>
+
             <!-- Prep Time -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.RecipeBook.TextInputLayout"
@@ -154,6 +179,24 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Personal Notes -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.RecipeBook.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Personal notes (optional)"
+                android:layout_marginBottom="24dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="3"
+                    android:gravity="top" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
