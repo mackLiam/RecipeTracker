@@ -100,9 +100,25 @@ public class RecipeDetailActivity extends AppCompatActivity {
             time += " mins";
         }
         tvPrepTime.setText(time);
-        
-        tvIngredients.setText(currentRecipe.ingredients);
-        tvSteps.setText(currentRecipe.steps);
+
+        String[] ingredientList = currentRecipe.ingredients.split(",");
+        StringBuilder formatted = new StringBuilder();
+        for (String ingredient : ingredientList) {
+            formatted.append("• ").append(ingredient.trim()).append("\n");
+        }
+        tvIngredients.setText(formatted.toString().trim());
+        String[] stepList = currentRecipe.steps.split("(?=\\d+\\.)");
+        StringBuilder formattedSteps = new StringBuilder();
+        int stepNum = 1;
+        for (String step : stepList) {
+            String cleaned = step.trim().replaceAll("^\\d+\\.?\\s*", "");
+            if (!cleaned.isEmpty()) {
+                formattedSteps.append(stepNum++).append(". ").append(cleaned).append("\n\n");
+            }
+        }
+        tvSteps.setText(formattedSteps.toString().trim());
+
+
 
         // Show notes section only if notes exist
         if (currentRecipe.notes != null && !currentRecipe.notes.isEmpty()) {
